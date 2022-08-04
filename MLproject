@@ -1,4 +1,4 @@
-name: nyc_airbnb
+name: udacity-mldevops-2nd-project
 conda_env: conda.yml
 
 entry_points:
