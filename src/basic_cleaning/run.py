@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 """
-Performs basic cleaning on the data and saves the result to Weights & Biases
+Download from W&B the raw dataset and apply some basic data cleaning, exporting the result to a new artifact
 """
 import argparse
 import logging
+import os
+
 import wandb
+
+import pandas as pd
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
@@ -24,30 +28,80 @@ def go(args):
     # YOUR CODE HERE     #
     ######################
 
+    logger.info('Downloading artifact')
+    local_path = wandb.use_artifact(args.input_artifact).file()
+
+    logger.info('Reading artifact')
+    df = pd.read_csv(local_path)
+
+    # Drop outliers
+    logger.info('Dropping outliers')
+    idx = df['price'].between(args.min_price, args.max_price)
+    df = df[idx].copy()
+
+    # Convert last_review to datetime
+    logger.info("Converting last_review to datetime")
+    df['last_review'] = pd.to_datetime(df['last_review'])
+
+    logger.info('Logging artifact')
+    filename = 'clean_sample.csv' 
+    df.to_csv(filename, index=False)
+    artifact = wandb.Artifact(
+        args.output_artifact,
+        type=args.output_type,
+        description=args.output_description
+    )
+    artifact.add_file(filename)
+    run.log_artifact(artifact)
+
+    os.remove(filename)
+    logger.info('Finished running component')
+
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="This step cleans the data")
+    parser = argparse.ArgumentParser(description="A very basic data cleaning")
 
 
     parser.add_argument(
-        "--parameter1", 
-        type=## INSERT TYPE HERE: str, float or int,
-        help=## INSERT DESCRIPTION HERE,
+        "--input_artifact", 
+        type=str,
+        help="Name of the input artifact to clean",
         required=True
     )
 
     parser.add_argument(
-        "--parameter2", 
-        type=## INSERT TYPE HERE: str, float or int,
-        help=## INSERT DESCRIPTION HERE,
+        "--output_artifact", 
+        type=str,
+        help="Name of the artifact to save after cleaning",
         required=True
     )
 
     parser.add_argument(
-        "--parameter3", 
-        type=## INSERT TYPE HERE: str, float or int,
-        help=## INSERT DESCRIPTION HERE,
+        "--output_type", 
+        type=str,
+        help="Type for the artifact to be saved",
+        required=True
+    )
+
+    parser.add_argument(
+        "--output_description", 
+        type=str,
+        help="Description of the artifact",
+        required=True
+    )
+
+    parser.add_argument(
+        "--min_price", 
+        type=float,
+        help="Minimum price to filter the data",
+        required=True
+    )
+
+    parser.add_argument(
+        "--max_price", 
+        type=float,
+        help="Maximum price to filter the data",
         required=True
     )
 
