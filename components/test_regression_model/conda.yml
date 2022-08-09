@@ -1,4 +1,4 @@
-name: test_regression_model
+name: test_model
 channels:
   - conda-forge
   - defaults

@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 
 def delta_date_feature(dates):
