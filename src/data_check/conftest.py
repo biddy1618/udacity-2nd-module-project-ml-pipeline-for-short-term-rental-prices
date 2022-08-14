@@ -8,8 +8,8 @@ import wandb
 
 
 def pytest_addoption(parser):
-    parser.addoption("--csv", action="store")
-    parser.addoption("--ref", action="store")
+    parser.addoption("--artifact_input", action="store")
+    parser.addoption("--artifact_reference", action="store")
     parser.addoption("--kl_threshold", action="store")
     parser.addoption("--min_price", action="store")
     parser.addoption("--max_price", action="store")
@@ -21,10 +21,10 @@ def data(request):
 
     # Download input artifact. This will also note that this script is using this
     # particular version of the artifact
-    data_path = run.use_artifact(request.config.option.csv).file()
+    data_path = run.use_artifact(request.config.option.artifact_input).file()
 
     if data_path is None:
-        pytest.fail("You must provide the --csv option on the command line")
+        pytest.fail("You must provide the --artifact_input option on the command line")
 
     df = pd.read_csv(data_path)
 
@@ -37,10 +37,10 @@ def ref_data(request):
 
     # Download input artifact. This will also note that this script is using this
     # particular version of the artifact
-    data_path = run.use_artifact(request.config.option.ref).file()
+    data_path = run.use_artifact(request.config.option.artifact_reference).file()
 
     if data_path is None:
-        pytest.fail("You must provide the --ref option on the command line")
+        pytest.fail("You must provide the --artifact_reference option on the command line")
 
     df = pd.read_csv(data_path)
 

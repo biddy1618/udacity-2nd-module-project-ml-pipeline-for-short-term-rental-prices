@@ -5,19 +5,19 @@ entry_points:
   main:
     parameters:
 
-      input_artifact:
+      artifact_input:
         description: Name of the input artifact to clean
         type: string
 
-      output_artifact:
+      artifact_name:
         description: Name of the artifact to save after cleaning
         type: string
 
-      output_type:
+      artifact_type:
         description: Type for the artifact to be saved
         type: string
 
-      output_description:
+      artifact_description:
         description: Description of the artifact
         type: string
 
@@ -31,4 +31,4 @@ entry_points:
 
 
     command: >-
-        python run.py  --input_artifact {input_artifact}  --output_artifact {output_artifact}  --output_type {output_type}  --output_description {output_description}  --min_price {min_price}  --max_price {max_price} 
+        python run.py  --artifact_input {artifact_input}  --artifact_name {artifact_name}  --artifact_type {artifact_type}  --artifact_description {artifact_description}  --min_price {min_price}  --max_price {max_price} 

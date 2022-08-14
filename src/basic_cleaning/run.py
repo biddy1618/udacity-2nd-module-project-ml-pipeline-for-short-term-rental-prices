@@ -1,23 +1,35 @@
 #!/usr/bin/env python
-"""
+'''
 Download from W&B the raw dataset and apply some basic data cleaning, exporting the result to a new artifact
-"""
+'''
 import argparse
 import logging
 import os
+import yaml
 
 import wandb
 
 import pandas as pd
 
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
+logging.basicConfig(level=logging.INFO, format='%(asctime)-15s %(message)s')
 logger = logging.getLogger()
 
+JOB_TYPE = 'default'
+try:
+    with open(os.path.join(os.getcwd(), 'MLproject')) as file:
+        doc = yaml.full_load(file)
+    JOB_TYPE = doc['name']
+except FileNotFoundError as e:
+    logger.error('`MLproject` file not found in `download_data` component.')
+    raise e
+except KeyError as e:
+    logger.error('`MLproject` file doesn\'t have `name` as key in `download_data` component.')
+    raise e
 
 def go(args):
 
-    run = wandb.init(job_type="basic_cleaning")
+    run = wandb.init(job_type=JOB_TYPE)
     run.config.update(args)
 
     # Download input artifact. This will also log that this script is using this
@@ -29,7 +41,7 @@ def go(args):
     ######################
 
     logger.info('Downloading artifact')
-    local_path = wandb.use_artifact(args.input_artifact).file()
+    local_path = wandb.use_artifact(args.artifact_input).file()
 
     logger.info('Reading artifact')
     df = pd.read_csv(local_path)
@@ -40,7 +52,7 @@ def go(args):
     df = df[idx].copy()
 
     # Convert last_review to datetime
-    logger.info("Converting last_review to datetime")
+    logger.info('Converting last_review to datetime')
     df['last_review'] = pd.to_datetime(df['last_review'])
 
     # Drop rows in the dataset that are not in the proper geolocation
@@ -51,61 +63,62 @@ def go(args):
     filename = 'clean_sample.csv' 
     df.to_csv(filename, index=False)
     artifact = wandb.Artifact(
-        args.output_artifact,
-        type=args.output_type,
-        description=args.output_description
+        args.artifact_name,
+        type=args.artifact_type,
+        description=args.artifact_description
     )
     artifact.add_file(filename)
-    run.log_artifact(artifact)
+    run.log_artifact(artifact) 
+    artifact.wait()
 
     os.remove(filename)
     logger.info('Finished running component')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description="A very basic data cleaning")
+    parser = argparse.ArgumentParser(description='A very basic data cleaning')
 
 
     parser.add_argument(
-        "--input_artifact", 
+        '--artifact_input', 
         type=str,
-        help="Name of the input artifact to clean",
+        help='Name of the input artifact to clean',
         required=True
     )
 
     parser.add_argument(
-        "--output_artifact", 
+        '--artifact_name', 
         type=str,
-        help="Name of the artifact to save after cleaning",
+        help='Name of the artifact to save after cleaning',
         required=True
     )
 
     parser.add_argument(
-        "--output_type", 
+        '--artifact_type', 
         type=str,
-        help="Type for the artifact to be saved",
+        help='Type for the artifact to be saved',
         required=True
     )
 
     parser.add_argument(
-        "--output_description", 
+        '--artifact_description', 
         type=str,
-        help="Description of the artifact",
+        help='Description of the artifact',
         required=True
     )
 
     parser.add_argument(
-        "--min_price", 
+        '--min_price', 
         type=float,
-        help="Minimum price to filter the data",
+        help='Minimum price to filter the data',
         required=True
     )
 
     parser.add_argument(
-        "--max_price", 
+        '--max_price', 
         type=float,
-        help="Maximum price to filter the data",
+        help='Maximum price to filter the data',
         required=True
     )
 

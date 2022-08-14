@@ -5,10 +5,18 @@ main:
   project_name: udacity-mldevops-2nd-project
   experiment_name: development
   steps: all
-etl:
-  sample: "sample1.csv"
-  min_price: 10  # dollars
-  max_price: 350  # dollars
+download_data:
+  sample: sample1.csv
+  artifact_name: sample.csv
+  artifact_type: raw_data
+  arfifact_description: "Raw file as downloaded"
+basic_cleaning:
+  artifact_name: clean_sample.csv
+  artifact_type: clean_sample
+  artifact_description: "Data without outliers and null values removed"
+  etl:
+    min_price: 10  # dollars
+    max_price: 350  # dollars
 data_check:
   kl_threshold: 0.2
 modeling:

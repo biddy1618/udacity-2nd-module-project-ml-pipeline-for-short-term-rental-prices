@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""
-This script splits the provided dataframe in test and remainder
-"""
+'''
+This script splits the provided dataframe in test and remainder.
+'''
 import argparse
 import logging
 import pandas as pd
@@ -10,23 +10,23 @@ import tempfile
 from sklearn.model_selection import train_test_split
 from wandb_utils.log_artifact import log_artifact
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
+logging.basicConfig(level=logging.INFO, format='%(asctime)-15s %(message)s')
 logger = logging.getLogger()
 
 
 def go(args):
 
-    run = wandb.init(job_type="train_val_test_split")
+    run = wandb.init(job_type='train_val_test_split')
     run.config.update(args)
 
     # Download input artifact. This will also note that this script is using this
     # particular version of the artifact
-    logger.info(f"Fetching artifact {args.input}")
+    logger.info(f'Fetching artifact {args.input}')
     artifact_local_path = run.use_artifact(args.input).file()
 
     df = pd.read_csv(artifact_local_path)
 
-    logger.info("Splitting trainval and test")
+    logger.info('Splitting trainval and test')
     trainval, test = train_test_split(
         df,
         test_size=args.test_size,
@@ -53,7 +53,7 @@ def go(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Split test and remainder")
 
-    parser.add_argument("input", type=str, help="Input artifact to split")
+    parser.add_argument("artifact_input", type=str, help="Input artifact to split")
 
     parser.add_argument(
         "test_size", type=float, help="Size of the test split. Fraction of the dataset, or number of items"

@@ -3,4 +3,4 @@ conda_env: conda.yml
 
 entry_points:
   main:
-    command: jupyter lab
+    command: jupyter lab --ServerApp.iopub_data_rate_limit=1.0e10

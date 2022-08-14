@@ -1,3 +1,7 @@
+'''
+Main components file
+'''
+
 import json
 
 import mlflow
@@ -8,7 +12,7 @@ import hydra
 from omegaconf import DictConfig
 
 _steps = [
-    'download',
+    'download_data',
     'basic_cleaning',
     'data_check',
     'data_split',
@@ -38,27 +42,27 @@ def go(config: DictConfig):
     # Move to a temporary directory
     with tempfile.TemporaryDirectory() as tmp_dir:
 
-        if 'download' in active_steps:
+        if 'download_data' in active_steps:
             # Download file and load in W&B
             # _ = mlflow.run(
             #     f"{config['main']['components_repository']}/get_data",
             #     entry_point='main',
             #     version='main',
             #     parameters={
-            #         'sample': config['etl']['sample'],
-            #         'artifact_name': 'sample.csv',
-            #         'artifact_type': 'raw_data',
-            #         'artifact_description': 'Raw file as downloaded'
+            #         'sample': config['download_data']['sample'],
+            #         'artifact_name': config['download_data']['artifact_name'],
+            #         'artifact_type': config['download_data']['artifact_type'],
+            #         'artifact_description': config['download_data']['artifact_description']
             #     },
             # )
             _ = mlflow.run(
-                os.path.join(root_path, 'components', 'get_data'),
-                'main',
+                os.path.join(root_path, 'components', 'download_data'),
+                entry_point='main',
                 parameters={
-                    'sample': config['etl']['sample'],
-                    'artifact_name': 'sample.csv',
-                    'artifact_type': 'raw_data',
-                    'artifact_description': 'Raw file as downloaded'
+                    'sample': config['download_data']['sample'],
+                    'artifact_name': config['download_data']['artifact_name'],
+                    'artifact_type': config['download_data']['artifact_type'],
+                    'artifact_description': config['download_data']['artifact_description']
                 },
             )
 
@@ -70,12 +74,12 @@ def go(config: DictConfig):
                 os.path.join(root_path, 'src', 'basic_cleaning'),
                 'main',
                 parameters={
-                    'input_artifact': 'sample.csv:latest',
-                    'output_artifact': 'clean_sample.csv',
-                    'output_type': 'clean_sample',
-                    'output_description': 'Data without outliers and null values removed',
-                    'min_price': config['etl']['min_price'],
-                    'max_price': config['etl']['max_price']
+                    'artifact_input': f"{config['download_data']['artifact_name']}:latest",
+                    'artifact_name': config['basic_cleaning']['artifact_name'],
+                    'artifact_type': config['basic_cleaning']['artifact_type'],
+                    'artifact_description': config['basic_cleaning']['artifact_description'],
+                    'min_price': config['basic_cleaning']['etl']['min_price'],
+                    'max_price': config['basic_cleaning']['etl']['max_price']
                 }
             )
 
@@ -87,11 +91,11 @@ def go(config: DictConfig):
                 os.path.join(root_path, 'src', 'data_check'),
                 'main',
                 parameters={
-                    'csv': 'clean_sample.csv:latest',
-                    'ref': 'clean_sample.csv:reference',
+                    'artifact_input': f"{config['basic_cleaning']['artifact_name']}:latest",
+                    'artifact_reference': f"{config['basic_cleaning']['artifact_name']}:reference",
                     'kl_threshold': config['data_check']['kl_threshold'],
-                    'min_price': config['etl']['min_price'],
-                    'max_price': config['etl']['max_price']
+                    'min_price': config['basic_cleaning']['etl']['min_price'],
+                    'max_price': config['basic_cleaning']['etl']['max_price']
                 }
             )
 
@@ -99,16 +103,26 @@ def go(config: DictConfig):
             ##################
             # Implement here #
             ##################
+            # _ = mlflow.run(
+            #     f"{config['main']['components_repository']}/train_val_test_split",
+            #     entry_point='main',
+            #     version='main',
+            #     parameters={
+            #         'input': f"{config['components']['basic_cleaning']['artifact_name']}:latest",
+            #         'test_size': config['modeling']['test_size'],
+            #         'random_seed': config['modeling']['random_seed'],
+            #         'stratify_by': config['modeling']['stratify_by']
+            #     }
+            # )
             _ = mlflow.run(
-                f"{config['main']['components_repository']}/train_val_test_split",
+                os.path.join(root_path, 'components', 'train_val_test_split'),
                 entry_point='main',
-                version='main',
                 parameters={
-                    'input': 'clean_sample.csv:latest',
+                    'artifact_input': f"{config['components']['basic_cleaning']['artifact_name']}:latest",
                     'test_size': config['modeling']['test_size'],
                     'random_seed': config['modeling']['random_seed'],
                     'stratify_by': config['modeling']['stratify_by']
-                }
+                },
             )
 
         if 'train_random_forest' in active_steps:
@@ -143,14 +157,22 @@ def go(config: DictConfig):
             ##################
             # Implement here #
             ##################
+            # _ = mlflow.run(
+            #     f"{config['main']['components_repository']}/test_regression_model",
+            #     entry_point='main',
+            #     version='main',
+            #     parameters={
+            #         'mlflow_model': 'random_forest_export:prod',
+            #         'test_dataset': 'test_data.csv:latest'
+            #     }
+            # )
             _ = mlflow.run(
-                f"{config['main']['components_repository']}/test_regression_model",
+                os.path.join(root_path, 'components', 'test_regression_model'),
                 entry_point='main',
-                version='main',
                 parameters={
                     'mlflow_model': 'random_forest_export:prod',
                     'test_dataset': 'test_data.csv:latest'
-                }
+                },
             )
 
 

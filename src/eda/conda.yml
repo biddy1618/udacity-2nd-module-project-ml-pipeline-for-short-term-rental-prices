@@ -8,7 +8,8 @@ dependencies:
   - pandas=1.2.3
   - pip=20.3.3
   - pandas-profiling=3.2.0
-  - ipywidgets=7.6.0
+  - ipywidgets=7.7.1
   - pyarrow=2.0
+  - scikit-learn=0.24.1
   - pip:
       - wandb==0.12.17

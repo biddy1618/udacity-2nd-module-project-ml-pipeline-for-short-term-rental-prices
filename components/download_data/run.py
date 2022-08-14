@@ -1,16 +1,16 @@
 #!/usr/bin/env python
-"""
-This script download a data source to a W&B
-"""
+'''
+This script downloads a data source to a W&B
+'''
 import argparse
 import logging
 import os
+import yaml
 
 import wandb
 
 from wandb_utils.log_artifact import log_artifact
 
-import yaml
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)-15s %(message)s')
 logger = logging.getLogger()
@@ -24,7 +24,7 @@ except FileNotFoundError as e:
     logger.error('`MLproject` file not found in `download_data` component.')
     raise e
 except KeyError as e:
-    logger.error('`MLproject` file doesn\'t have `name` as key.')
+    logger.error('`MLproject` file doesn\'t have `name` as key in `download_data` component.')
     raise e
 
 def go(args):
