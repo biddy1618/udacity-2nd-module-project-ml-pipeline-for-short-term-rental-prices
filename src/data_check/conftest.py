@@ -1,5 +1,5 @@
 '''
-
+Configuration for PyTest.
 '''
 
 import pytest

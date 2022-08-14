@@ -9,6 +9,30 @@ entry_points:
         description: Artifact to split (a CSV file)
         type: string
 
+      artifact_trainval_name:
+        description: Name of the training and validation artifact
+        type: string
+
+      artifact_trainval_type:
+        description: Type of the training and validation artifact
+        type: string
+
+      artifact_trainval_description:
+        description: Description of the training and validation artifact
+        type: string
+
+      artifact_test_name:
+        description: Name of the test artifact
+        type: string
+
+      artifact_test_type:
+        description: Type of the test artifact
+        type: string
+
+      artifact_test_description:
+        description: Description of the test artifact
+        type: string
+
       test_size:
         description: Size of the test split. Fraction of the dataset, or number of items
         type: string
@@ -23,4 +47,13 @@ entry_points:
         type: string
         default: 'none'
 
-    command: "python run.py {artifact_input} {test_size} --random_seed {random_seed} --stratify_by {stratify_by}"
+    command: >-
+      python run.py {artifact_input} \
+                    --artifact_trainval_name {artifact_trainval_name} \
+                    --artifact_trainval_type {artifact_trainval_type} \
+                    --artifact_trainval_description {artifact_trainval_description} \
+                    --artifact_test_name {artifact_test_name} \
+                    --artifact_test_type {artifact_test_type} \
+                    --artifact_test_description {artifact_test_description} \
+                    --random_seed {random_seed} \
+                    --stratify_by {stratify_by}

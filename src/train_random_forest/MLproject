@@ -32,8 +32,20 @@ entry_points:
         description: Maximum number of words to consider for the TFIDF
         type: string
 
-      output_artifact:
+      quantile:
+        description: Quantile reference for mean encodind high-cardinality feature `neighbourhood`
+        type: string
+
+      artifact_model_name:
         description: Name for the output artifact
+        type: string
+
+      artifact_model_type:
+        description: Type for the output serialized model
+        type: string
+
+      artifact_model_description:
+        description: Description for the output serialized model
         type: string
 
     command: >-
@@ -43,4 +55,7 @@ entry_points:
                     --stratify_by {stratify_by} \
                     --rf_config {rf_config} \
                     --max_tfidf_features {max_tfidf_features} \
-                    --output_artifact {output_artifact}
+                    --quantile {quantile} \
+                    --artifact_model_name {artifact_model_name} \
+                    --artifact_model_type {artifact_model_type} \
+                    --artifact_model_description {artifact_model_description}

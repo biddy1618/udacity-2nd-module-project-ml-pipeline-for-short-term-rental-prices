@@ -45,7 +45,7 @@
 ┃   ┗━━ 📂 train_random_forest              # `train_random_forest` component
 ┃       ┣━━ ❗ conda.yml                    # conda environment configuration
 ┃       ┣━━ ❗ MLproject                    # MLproject file configuration
-┃       ┣━━ 🐍 feature_engineering.py       # module for additional feature engineering functions
+┃       ┣━━ 🐍 feature_engineering.py       # module for additional feature engineering functions and classes
 ┃       ┗━━ 🐍 run.py                       # main script for MLproject component
 ┣━━ 📄 .gitignore                           # gitignore file
 ┣━━ 📄 LICENSE.txt                          # license
@@ -57,3 +57,4 @@
 ┣━━ 📄 README-guide.md                      # readme file on the task
 ┗━━ 📄 README.me                            # readme file on the project
 ```
+

@@ -108,7 +108,7 @@ def go(config: DictConfig):
             #     entry_point='main',
             #     version='main',
             #     parameters={
-            #         'input': f"{config['components']['basic_cleaning']['artifact_name']}:latest",
+            #         'input': f"{config['basic_cleaning']['artifact_name']}:latest",
             #         'test_size': config['modeling']['test_size'],
             #         'random_seed': config['modeling']['random_seed'],
             #         'stratify_by': config['modeling']['stratify_by']
@@ -118,7 +118,13 @@ def go(config: DictConfig):
                 os.path.join(root_path, 'components', 'train_val_test_split'),
                 entry_point='main',
                 parameters={
-                    'artifact_input': f"{config['components']['basic_cleaning']['artifact_name']}:latest",
+                    'artifact_input': f"{config['basic_cleaning']['artifact_name']}:latest",
+                    'artifact_trainval_name': f"{config['modeling']['artifact_trainval_name']}",
+                    'artifact_trainval_type': config['modeling']['artifact_trainval_type'],
+                    'artifact_trainval_description': config['modeling']['artifact_trainval_description'],
+                    'artifact_test_name': f"{config['modeling']['artifact_test_name']}",
+                    'artifact_test_type': config['modeling']['artifact_test_type'],
+                    'artifact_test_description': config['modeling']['artifact_test_description'],
                     'test_size': config['modeling']['test_size'],
                     'random_seed': config['modeling']['random_seed'],
                     'stratify_by': config['modeling']['stratify_by']
@@ -142,36 +148,27 @@ def go(config: DictConfig):
                 os.path.join(root_path, 'src', 'train_random_forest'),
                 'main',
                 parameters={
-                    'trainval_artifact': 'trainval_data.csv:latest',
+                    'trainval_artifact': f"{config['modeling']['artifact_trainval_name']}:latest",
                     'val_size': config['modeling']['val_size'],
                     'random_seed': config['modeling']['random_seed'],
                     'stratify_by': config['modeling']['stratify_by'],
                     'rf_config': rf_config,
                     'max_tfidf_features': config['modeling']['max_tfidf_features'],
-                    'output_artifact': 'random_forest_export'
+                    'quantile': config['modeling']['quantile'],
+                    'artifact_model_name': config['modeling']['artifact_model_name'],
+                    'artifact_model_type': config['modeling']['artifact_model_type'],
+                    'artifact_model_description': config['modeling']['artifact_model_description']
                 }
             )
 
         if 'test_regression_model' in active_steps:
-
-            ##################
-            # Implement here #
-            ##################
-            # _ = mlflow.run(
-            #     f"{config['main']['components_repository']}/test_regression_model",
-            #     entry_point='main',
-            #     version='main',
-            #     parameters={
-            #         'mlflow_model': 'random_forest_export:prod',
-            #         'test_dataset': 'test_data.csv:latest'
-            #     }
-            # )
+            
             _ = mlflow.run(
                 os.path.join(root_path, 'components', 'test_regression_model'),
                 entry_point='main',
                 parameters={
-                    'mlflow_model': 'random_forest_export:prod',
-                    'test_dataset': 'test_data.csv:latest'
+                    'mlflow_model': f"{config['modeling']['artifact_model_name']}:prod",
+                    'test_dataset': f"{config['modeling']['artifact_test_name']}:latest"
                 },
             )
 

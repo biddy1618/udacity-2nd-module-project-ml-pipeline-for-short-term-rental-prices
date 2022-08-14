@@ -9,7 +9,7 @@ download_data:
   sample: sample1.csv
   artifact_name: sample.csv
   artifact_type: raw_data
-  arfifact_description: "Raw file as downloaded"
+  artifact_description: "Raw file as downloaded"
 basic_cleaning:
   artifact_name: clean_sample.csv
   artifact_type: clean_sample
@@ -20,6 +20,13 @@ basic_cleaning:
 data_check:
   kl_threshold: 0.2
 modeling:
+  # Training and validation data artifacts
+  artifact_trainval_name: trainval_data.csv
+  artifact_trainval_type: trainval_data
+  artifact_trainval_description: "Training and validation split of dataset"
+  artifact_test_name: test_data.csv
+  artifact_test_type: test_data
+  artifact_test_description: "Test split of dataset"
   # Fraction of data to use for test (the remaining will be used for train and validation)
   test_size: 0.2
   # Fraction of remaining data to use for validation
@@ -31,6 +38,8 @@ modeling:
   # Maximum number of features to consider for the TFIDF applied to the title of the
   # insertion (the column called "name")
   max_tfidf_features: 15
+  # Quantile for high-cardinality feature `neighbourhood` to be mean encoded
+  quantile: 0.9
   # NOTE: you can put here any parameter that is accepted by the constructor of
   # RandomForestRegressor. This is a subsample, but more could be added:
   random_forest:
@@ -44,3 +53,7 @@ modeling:
     max_features: 0.5
     # DO not change the following
     oob_score: true
+  # Name of trained model artifact and its components (folder)
+  artifact_model_name: random_forest_export
+  artifact_model_type: model_export
+  artifact_model_description: Random Forest pipeline export
