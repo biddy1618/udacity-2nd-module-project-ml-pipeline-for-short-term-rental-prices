@@ -77,7 +77,6 @@ mlflow run https://github.com/biddy1618/udacity-2nd-module-project-ml-pipeline-f
 
 - Implemented custom transformer class [`MeanTargetEncoder`](src/train_random_forest/feature_engineering.py) to deal with high-cardinality feature `neighbourhood`
 - Refactored `config.yaml` file to hold all variable inputs (along with all components' `MLproject` and `run.py` files)
-- 
 
 ## Links
 
