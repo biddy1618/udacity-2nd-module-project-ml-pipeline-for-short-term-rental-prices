@@ -5,12 +5,12 @@ entry_points:
   main:
     parameters:
 
-      mlflow_model:
+      artifact_model_name:
         description: An MLflow serialized model
         type: string
 
-      test_dataset:
+      artifact_test_name:
         description: The test artifact
         type: string
 
-    command: "python run.py  --mlflow_model {mlflow_model} --test_dataset {test_dataset}"
+    command: "python run.py  --artifact_model_name {artifact_model_name} --artifact_test_name {artifact_test_name}"

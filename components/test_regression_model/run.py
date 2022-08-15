@@ -4,6 +4,8 @@ This step takes the best model, tagged with the 'prod' tag, and tests it against
 '''
 import argparse
 import logging
+import os
+import yaml
 
 import wandb
 import mlflow
@@ -37,10 +39,10 @@ def go(args):
     logger.info('Downloading artifacts')
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
-    model_local_path = run.use_artifact(args.mlflow_model).download()
+    model_local_path = run.use_artifact(args.artifact_model_name).download()
 
     # Download test dataset
-    test_dataset_path = run.use_artifact(args.test_dataset).file()
+    test_dataset_path = run.use_artifact(args.artifact_test_name).file()
 
     # Read test dataset
     X_test = pd.read_csv(test_dataset_path)
@@ -68,14 +70,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Test the provided model against the test dataset')
 
     parser.add_argument(
-        '--mlflow_model',
+        '--artifact_model_name',
         type=str, 
         help='Input MLFlow model',
         required=True
     )
 
     parser.add_argument(
-        '--test_dataset',
+        '--artifact_test_name',
         type=str, 
         help='Test dataset',
         required=True

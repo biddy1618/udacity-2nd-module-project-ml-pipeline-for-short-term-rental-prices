@@ -20,7 +20,7 @@ _steps = [
     # NOTE: We do not include this in the steps so it is not run by mistake.
     # You first need to promote a model export to 'prod' before you can run this,
     # then you need to run this step explicitly
-#    'test_regression_model'
+    'test_regression_model'
 ]
 
 
@@ -167,8 +167,8 @@ def go(config: DictConfig):
                 os.path.join(root_path, 'components', 'test_regression_model'),
                 entry_point='main',
                 parameters={
-                    'mlflow_model': f"{config['modeling']['artifact_model_name']}:prod",
-                    'test_dataset': f"{config['modeling']['artifact_test_name']}:latest"
+                    'artifact_model_name': f"{config['modeling']['artifact_model_name']}:prod",
+                    'artifact_test_name': f"{config['modeling']['artifact_test_name']}:latest"
                 },
             )
 
