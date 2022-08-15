@@ -58,3 +58,28 @@
 ┗━━ 📄 README.me                            # readme file on the project
 ```
 
+## Commands
+
+Command used to fine-tune the model:
+```bash
+mlflow run . \
+    -P steps=train_random_forest \
+    -P hydra_options="modeling.max_tfidf_features=10,15,30 modeling.random_forest.max_features=0.1,0.33,0.5,0.75,1 -m"
+```
+
+Command to run the pipeline on the new sample:
+```bash
+mlflow run https://github.com/biddy1618/udacity-2nd-module-project-ml-pipeline-for-short-term-rental-prices.git \
+    -v v1.0.3 -P hydra_options="download_data.sample='sample2.csv' main.experiment_name='production'"
+```
+
+## Changes made
+
+- Implemented custom transformer class [`MeanTargetEncoder`](src/train_random_forest/feature_engineering.py) to deal with high-cardinality feature `neighbourhood`
+- Refactored `config.yaml` file to hold all variable inputs (along with all components' `MLproject` and `run.py` files)
+- 
+
+## Links
+
+- [WANDB project link](https://wandb.ai/biddyasdiddy/udacity-mldevops-2nd-project-final)
+- [Github link](https://github.com/biddy1618/udacity-2nd-module-project-ml-pipeline-for-short-term-rental-prices)
