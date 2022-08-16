@@ -23,11 +23,11 @@ entry_points:
 
       min_price:
         description: Minimum price to filter the data
-        type: string
+        type: float
 
       max_price:
         description: Maximum price to filter the data
-        type: string
+        type: float
 
 
     command: >-

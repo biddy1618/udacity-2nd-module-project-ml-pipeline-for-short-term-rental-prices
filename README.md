@@ -60,6 +60,22 @@
 
 ## Commands
 
+### Requirements
+
+Create conda environment (version - __4.13.0__) and install mlflow package:
+```bash
+conda install -c conda-forge mlflow=1.14.1
+``` 
+
+### EDA
+
+Command to run EDA:
+```bash
+mlflow run src/eda
+```
+
+### Modeling
+
 Command used to fine-tune the model:
 ```bash
 mlflow run . \
@@ -72,6 +88,11 @@ Command to run the pipeline on the new sample:
 mlflow run https://github.com/biddy1618/udacity-2nd-module-project-ml-pipeline-for-short-term-rental-prices.git \
     -v v1.0.3 -P hydra_options="download_data.sample='sample2.csv' main.experiment_name='production'"
 ```
+
+### Note
+
+- Component `data_check` requires reference artifact (data artifact with tag `reference`).
+- Component `test_regression_model` requires production model (model artifact with tag `prod`).
 
 ## Changes made
 

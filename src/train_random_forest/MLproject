@@ -11,11 +11,11 @@ entry_points:
 
       val_size:
         description: Size of the validation split. Fraction of the dataset, or number of items
-        type: string
+        type: float
 
       random_seed:
         description: Seed for the random number generator. Use this for reproducibility
-        type: string
+        type: float
         default: 42
 
       stratify_by:
@@ -30,11 +30,11 @@ entry_points:
 
       max_tfidf_features:
         description: Maximum number of words to consider for the TFIDF
-        type: string
+        type: float
 
       quantile:
         description: Quantile reference for mean encodind high-cardinality feature `neighbourhood`
-        type: string
+        type: float
 
       artifact_model_name:
         description: Name for the output artifact

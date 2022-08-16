@@ -35,11 +35,11 @@ entry_points:
 
       test_size:
         description: Size of the test split. Fraction of the dataset, or number of items
-        type: string
+        type: float
 
       random_seed:
         description: Seed for the random number generator. Use this for reproducibility
-        type: string
+        type: float
         default: 42
 
       stratify_by:
