@@ -237,6 +237,9 @@ def get_inference_pipeline(rf_config, max_tfidf_features, quantile):
         transformers=[
             ('ordinal_cat', ordinal_categorical_preproc, ordinal_categorical),
             ('non_ordinal_cat', non_ordinal_categorical_preproc, non_ordinal_categorical),
+            ('non_ordinal_cat_high_card', 
+            non_ordinal_categorical_high_card_preproc, 
+            non_ordinal_categorical_high_cardinality)
             ('impute_zero', zero_imputer, zero_imputed),
             ('transform_date', date_imputer, ['last_review']),
             ('transform_name', name_tfidf, ['name'])
