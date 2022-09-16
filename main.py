@@ -1,5 +1,7 @@
 '''
 Main components file
+
+Author: Dauren Baitursyn
 '''
 
 import json
