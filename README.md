@@ -1,5 +1,14 @@
 # Build an ML Pipeline for Short-Term Rental Prices in NYC
 
+- Project **Build an ML Pipeline for Short-Term Rental Prices in NYC** of ML DevOps Engineer Nanodegree Udacity
+
+## Project description
+
+Building model workflow for clean, organized, reproducible, end-to-en ML pipeline using MLflow.
+The project includes EDA and ETL of data. The experiments, data, code and metrics are tracked using
+WANDB tool. The components of ML pipeline are separated and isolated from others. The project also
+includes some data checks. The best model is selected and tagged in Git repo.
+
 ## Project structure
 
 ```bash
@@ -49,7 +58,7 @@
 ┃       ┗━━ 🐍 run.py                       # main script for MLproject component
 ┣━━ 📄 .gitignore                           # gitignore file
 ┣━━ 📄 LICENSE.txt                          # license
-┣━━ ❗ conda.yml                            # conda environment for the main componentn
+┣━━ ❗ conda.yml                            # conda environment for the main component
 ┣━━ ❗ config.yaml                          # hydra configuration file
 ┣━━ ❗ environment.yml                      # conda environment for setting up the task (more in README-guide.md)
 ┣━━ ❗ MLproject                            # environment variables for docker compose
@@ -93,12 +102,12 @@ mlflow run https://github.com/biddy1618/udacity-2nd-module-project-ml-pipeline-f
 
 - Component `data_check` requires reference artifact (data artifact with tag `reference`).
 - Component `test_regression_model` requires production model (model artifact with tag `prod`).
-
-## Changes made
-
 - Implemented custom transformer class [`MeanTargetEncoder`](src/train_random_forest/feature_engineering.py) to deal with high-cardinality feature `neighbourhood`
 - Refactored `config.yaml` file to hold all variable inputs (along with all components' `MLproject` and `run.py` files)
 
+## Project implementation details
+
+For more details, go to this readme - [`README-guide.md`](./README-guide.md)
 ## Links
 
 - [WANDB project link](https://wandb.ai/biddyasdiddy/udacity-mldevops-2nd-project-final)

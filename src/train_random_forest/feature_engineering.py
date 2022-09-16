@@ -1,5 +1,7 @@
 '''
 Additional module for helper classes and functions.
+
+Author: Dauren Baitursyn
 '''
 
 import pandas as pd
@@ -25,7 +27,7 @@ class MeanTargetEncoder(BaseEstimator, TransformerMixin):
         
         df_ = pd.DataFrame(data={'neighbourhood': X, 'target': y})
         value_counts = df_['neighbourhood'].value_counts()
-        within_quantile = value_counts[value_counts.cumsum() <= QUANTILE * df_.shape[0]].index.to_list()
+        within_quantile = value_counts[value_counts.cumsum() <= self.quantile * df_.shape[0]].index.to_list()
         
         df_['neighbourhood_new'] = df_['neighbourhood'].map(lambda x: x if x in within_quantile else 'Other')
         encoder = df_.groupby('neighbourhood_new')['target'].mean().to_dict()
@@ -40,7 +42,7 @@ class MeanTargetEncoder(BaseEstimator, TransformerMixin):
             
         X_ = pd.Series(X)
         X_ = X_.map(lambda x: x if x in self.within_quantile else 'Other')
-        X_ = X_.map(encoder)
+        X_ = X_.map(self.encoder)
         
         try:
             assert X_.isna().sum() == 0

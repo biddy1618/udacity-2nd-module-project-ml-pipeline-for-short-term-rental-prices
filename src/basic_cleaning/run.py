@@ -1,6 +1,7 @@
-#!/usr/bin/env python
 '''
-Download from W&B the raw dataset and apply some basic data cleaning, exporting the result to a new artifact
+Download from W&B the raw dataset and apply some basic data cleaning, exporting the result to a new artifact.
+
+Author: Dauren Baitursyn
 '''
 import argparse
 import logging
@@ -35,10 +36,6 @@ def go(args):
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
     # artifact_local_path = run.use_artifact(args.input_artifact).file()
-
-    ######################
-    # YOUR CODE HERE     #
-    ######################
 
     logger.info('Downloading artifact')
     local_path = wandb.use_artifact(args.artifact_input).file()

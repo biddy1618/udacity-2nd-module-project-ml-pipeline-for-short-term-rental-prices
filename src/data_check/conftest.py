@@ -1,5 +1,7 @@
 '''
 Configuration for PyTest.
+
+Author: Dauren Baitursyn
 '''
 
 import pytest

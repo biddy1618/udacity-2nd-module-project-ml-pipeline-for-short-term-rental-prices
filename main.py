@@ -67,9 +67,6 @@ def go(config: DictConfig):
             )
 
         if 'basic_cleaning' in active_steps:
-            ##################
-            # Implement here #
-            ##################
             _ = mlflow.run(
                 os.path.join(root_path, 'src', 'basic_cleaning'),
                 'main',
@@ -84,9 +81,6 @@ def go(config: DictConfig):
             )
 
         if 'data_check' in active_steps:
-            ##################
-            # Implement here #
-            ##################
             _ = mlflow.run(
                 os.path.join(root_path, 'src', 'data_check'),
                 'main',
@@ -100,9 +94,6 @@ def go(config: DictConfig):
             )
 
         if 'data_split' in active_steps:
-            ##################
-            # Implement here #
-            ##################
             # _ = mlflow.run(
             #     f"{config['main']['components_repository']}/train_val_test_split",
             #     entry_point='main',
@@ -141,9 +132,6 @@ def go(config: DictConfig):
             # NOTE: use the rf_config we just created as the rf_config parameter for the train_random_forest
             # step
 
-            ##################
-            # Implement here #
-            ##################
             _ = mlflow.run(
                 os.path.join(root_path, 'src', 'train_random_forest'),
                 'main',
