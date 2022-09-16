@@ -18,14 +18,12 @@ to be retrained with the same cadence, necessitating an end-to-end pipeline that
   * [Data cleaning](#data-cleaning)
   * [Data testing](#data-testing)
   * [Data splitting](#data-splitting)
-  * [Train Random Forest](#train-random-forest)
-  * [Optimize hyperparameters](#optimize-hyperparameters)
-  * [Select the best model](#select-the-best-model)
-  * [Test](#test)
+  * [Training Random Forest](#training-random-forest)
+  * [Optimizing hyperparameters](#optimizing-hyperparameters)
+  * [Selecting and tagging the best model](#selecting-and-tagging-the-best-model)
+  * [Testing](#testing)
   * [Visualize the pipeline](#visualize-the-pipeline)
-  * [Release the pipeline](#release-the-pipeline)
-  * [Train the model on a new data sample](#train-the-model-on-a-new-data-sample)
-- [Cleaning up](#cleaning-up)
+- [License](#license)
 
 ## Preliminary steps
 ### Create environment
@@ -109,7 +107,8 @@ You can see the parameters that they require by looking into their `MLproject` f
 - `test_regression_model`: this step takes the best model, tagged with the __prod__ tag, and tests it against the test dataset. [MLproject](https://github.com/udacity/build-ml-pipeline-for-short-term-rental-prices/blob/main/components/test_regression_model/MLproject)
 
 In this project, these components were downloaded and used locally with some minor modifications.
-## In case of errors
+
+__NOTE In case of errors__
 When you make an error writing your `conda.yml` file, you might end up with an environment for the pipeline or one
 of the components that is corrupted. Most of the time `mlflow` realizes that and creates a new one every time you try
 to fix the problem. However, sometimes this does not happen, especially if the problem was in the `pip` dependencies.
@@ -130,6 +129,7 @@ for e in $(conda info --envs | grep mlflow | cut -f1 -d" "); do conda uninstall 
 
 This will iterate over all the environments created by `mlflow` and remove them.
 
+## Instructions
 ### Exploratory Data Analysis (EDA)
 Run the `download` component to get a sample of the data. The pipeline will also upload it to Weights & Biases:
    
@@ -143,7 +143,7 @@ mlflow run src/eda
 ```
 This will install Jupyter and all the dependencies for `pandas-profiling`, and open a Jupyter notebook EDA instance.
 
-## Data cleaning
+### Data cleaning
    
 Run the pipeline. If you go to W&B, you will see the new artifact type `clean_sample` and within it the `clean_sample.csv` artifact
 
@@ -159,12 +159,12 @@ step with:
 mlflow run . -P steps="data_check"
 ```
 
-## Data splitting
+### Data splitting
 Use the provided component called ``train_val_test_split`` to extract and segregate the test set. 
 Add it to the pipeline then run the pipeline. As usual, use the configuration for the parameters like `test_size`,
 `random_seed` and `stratify_by`.
 
-## Training Random Forest
+### Training Random Forest
 
 The component for training Random Forest model is defined at `src/train_random_forest` folder.
 
@@ -183,7 +183,7 @@ you can change this command line to accomplish your task.
 
 The best model with best score is tagged under `prod` tag in [WANDB project link](https://wandb.ai/biddyasdiddy/udacity-mldevops-2nd-project-final).
 
-## Testing
+### Testing
 ``test_regression_model`` component tests your production model against the test set.
 
 **NOTE**: This step is NOT run by default when you run the pipeline. In fact, it needs the manual step
